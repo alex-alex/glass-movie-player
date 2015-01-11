@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/res/values/attrs.xml -->
+    <eat-comment/>
+    <attr format="dimension" name="firstLineIndent"/>
+    <attr name="fontWeight">
+        <flag name="regular" value="0x00000000"/>
+        <flag name="thin" value="0x00000001"/>
+        <flag name="light" value="0x00000002"/>
+        <flag name="medium" value="0x00000003"/>
+        <flag name="bold" value="0x00000004"/>
+        <flag name="black" value="0x00000005"/>
+        <flag name="italic" value="0x00000010"/>
+        <flag name="condensed" value="0x00000100"/>
+    </attr>
+    <attr format="dimension" name="hangingIndent"/>
+    <attr format="reference" name="id"/>
+    <attr format="reference" name="image"/>
+    <attr format="boolean" name="isDefaultItem"/>
+    <attr format="string" name="name"/>
+    <attr format="reference" name="tip"/>
+    <!-- From: file:/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="large_text_size">70.0px</dimen>
+    <dimen name="medium_text_size">40.0px</dimen>
+    <dimen name="small_text_size">26.0px</dimen>
+    <!-- From: file:/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/res/values/ids.xml -->
+    <eat-comment/>
+    <item name="holder" type="id"/>
+    <!-- From: file:/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="action_settings">Settings</string>
+    <string name="app_name">GlassMoviePlayer</string>
+    <string name="glass_voice_trigger">watch a movie</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- From: file:/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="LargeOverlayText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/large_text_size</item>
+    </style>
+    <style name="MediumOverlayText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+    </style>
+    <style name="OverlayText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:shadowColor">@android:color/black</item>
+        <item name="android:shadowDx">1.0</item>
+        <item name="android:shadowDy">1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+        <item name="fontWeight">thin</item>
+    </style>
+    <style name="TipsViewText" parent="@style/OverlayText">
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="fontWeight">light</item>
+    </style>
+</resources>
