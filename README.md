@@ -2,7 +2,7 @@ Glass Movie Player
 ==========================
 Browse and watch movies on Google Glass.
 
-Note: With the XE16/17 updates, fetching video thumbnails from the content provider is noticeably slow. If anyone knows how to fix this, please let me know!
+Note: This fork is fully working on XE22, has fixed problems with bad colors and support for subtitles (just put the .srt file with same name to same directory)
 
 Usage
 -----
