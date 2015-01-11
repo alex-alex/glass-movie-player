@@ -1,5 +1,6 @@
 package me.studnicka.glassmovieplayer;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -129,10 +130,13 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
             mPlayer.setOnTimedTextListener(mTimedTextListener);
 
             String subtitlePath = mMovieUri.toString().substring(0, mMovieUri.toString().length() - 4) + ".srt";
-            mPlayer.addTimedTextSource(subtitlePath, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-            int textTrackIndex = findTrackIndexFor(MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mPlayer.getTrackInfo());
-            if (textTrackIndex >= 0) {
-                mPlayer.selectTrack(textTrackIndex);
+            File file = new File(subtitlePath);
+            if(file.exists()) {
+                mPlayer.addTimedTextSource(subtitlePath, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+                int textTrackIndex = findTrackIndexFor(MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mPlayer.getTrackInfo());
+                if (textTrackIndex >= 0) {
+                    mPlayer.selectTrack(textTrackIndex);
+                }
             }
 
         } catch (IllegalArgumentException e) {
