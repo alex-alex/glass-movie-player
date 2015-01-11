@@ -91,16 +91,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class drawable {
         public static final int gradient_bg=0x7f020000;
         public static final int ic_delete_medium=0x7f020001;
-        public static final int ic_launcher=0x7f020002;
-        public static final int ic_media_pause=0x7f020003;
-        public static final int ic_media_play=0x7f020004;
-        public static final int ic_video_medium=0x7f020005;
-        public static final int ic_volume_0_large=0x7f020006;
-        public static final int ic_volume_1_large=0x7f020007;
-        public static final int ic_volume_2_large=0x7f020008;
-        public static final int ic_volume_medium=0x7f020009;
-        public static final int scrubber=0x7f02000a;
-        public static final int scrubber_progress=0x7f02000b;
+        public static final int ic_media_pause=0x7f020002;
+        public static final int ic_media_play=0x7f020003;
+        public static final int ic_video_medium=0x7f020004;
+        public static final int ic_volume_0_large=0x7f020005;
+        public static final int ic_volume_1_large=0x7f020006;
+        public static final int ic_volume_2_large=0x7f020007;
+        public static final int ic_volume_medium=0x7f020008;
+        public static final int scrubber=0x7f020009;
+        public static final int scrubber_progress=0x7f02000a;
     }
     public static final class id {
         public static final int adjust_volume=0x7f080021;

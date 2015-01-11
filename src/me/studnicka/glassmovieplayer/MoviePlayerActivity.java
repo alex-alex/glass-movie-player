@@ -451,7 +451,7 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(ctx, timedText.getText().toString().substring(0, timedText.getText().length() - 4), Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(ctx, timedText.getText().toString().substring(0, timedText.getText().length() - 4), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
                     }
