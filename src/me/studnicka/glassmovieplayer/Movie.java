@@ -1,5 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
-
+package me.studnicka.glassmovieplayer;
 
 public class Movie {
 	private long mId;

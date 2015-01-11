@@ -1,4 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import java.util.Locale;
 

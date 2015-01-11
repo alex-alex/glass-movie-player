@@ -1,4 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import java.util.ArrayList;
 
@@ -15,31 +15,23 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.glass.touchpad.Gesture;
-import com.google.android.glass.touchpad.GestureDetector;
-import com.google.android.glass.touchpad.GestureDetector.BaseListener;
 import com.google.android.glass.widget.CardScrollView;
-import com.ocd.dev.glassmovieplayer.SoundManager.SoundId;
+import me.studnicka.glassmovieplayer.SoundManager.SoundId;
 
 public class MoviePickerActivity extends Activity implements LoaderCallbacks<Cursor> {
 	public static final String EXTRA_MOVIE_BUCKET = "movie bucket";
-	public static final int RESULT_VIDEO = 1;
 	private static final int URL_LOADER = 0;
 	private Cursor mMovieCursor;
 	private CardScrollView mList;
-	private GestureDetector mTouchDetector;
 	private MovieAdapter mAdapter;
 	private View mEmptyMessage;
 	private int mLength;
@@ -180,20 +172,16 @@ public class MoviePickerActivity extends Activity implements LoaderCallbacks<Cur
 			
 			Context context = (Context)cookie;
 			
-			if(result == 0)
-			{
+			if(result == 0) {
 				Toast.makeText(context, "Error. Could not delete video.", Toast.LENGTH_SHORT).show();
-			}
-			else
-			{
+			} else {
 				Toast.makeText(context, "Video deleted", Toast.LENGTH_SHORT).show();
 			}
 		}
 		
 	}
 	
-    private SoundManager getSoundManager()
-    {
+    private SoundManager getSoundManager() {
       return ((GlassApplication)getApplication()).getSoundManager();
     }
 
@@ -234,8 +222,6 @@ public class MoviePickerActivity extends Activity implements LoaderCallbacks<Cur
 		
         mAdapter = new MovieAdapter(this, cursor);
         mList.setAdapter(mAdapter);
-        
-		//mAdapter.swapCursor(cursor);
 		
 		mLength = cursor.getCount();
 		invalidateOptionsMenu();
@@ -253,7 +239,6 @@ public class MoviePickerActivity extends Activity implements LoaderCallbacks<Cur
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-		//mAdapter.swapCursor(null);
         mAdapter = new MovieAdapter(this, mMovieCursor);
         mList.setAdapter(mAdapter);
 	}

@@ -1,11 +1,10 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.glass.app.Card;
 import com.google.android.glass.widget.CardScrollAdapter;
 
 public class MovieAdapter extends CardScrollAdapter {
@@ -91,7 +89,7 @@ public class MovieAdapter extends CardScrollAdapter {
 		TextView name = (TextView)view.findViewById(R.id.name);
 		ImageView thumbnail = (ImageView)view.findViewById(R.id.thumbnail);
 		TextView count = (TextView)view.findViewById(R.id.count);
-		count.setText(String.format("%d of %d", mCursor.getPosition() + 1, mCursor.getCount()));
+		count.setText(String.format("%d / %d", mCursor.getPosition() + 1, mCursor.getCount()));
 		name.setText(mCursor.getString(mVideoColumnIndex));
 		
 		long id = mCursor.getLong(mIdColumnIndex);

@@ -1,4 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.google.android.glass.touchpad.Gesture;
@@ -19,17 +17,15 @@ import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.touchpad.GestureDetector.BaseListener;
 import com.google.android.glass.touchpad.GestureDetector.FingerListener;
 import com.google.android.glass.touchpad.GestureDetector.ScrollListener;
-import com.ocd.dev.glassmovieplayer.SoundManager.SoundId;
+import me.studnicka.glassmovieplayer.SoundManager.SoundId;
 
 public class VolumeDialog extends Dialog {
-	private static final String TAG = "VolumeDialog";
 	private Context mContext;
 	private ImageView mVolumeIcon;
 	private SeekBar mVolumeSeek;
 	private GestureDetector mGestureDetector;
 	private int mVolume;
 	private SoundManager mSoundManager;
-	private VolumeHelper mVolumeHelper;
 	private Handler mHandler;
 	private int mNumVolumeValues;
 
@@ -45,18 +41,18 @@ public class VolumeDialog extends Dialog {
 
 		mVolumeIcon = (ImageView)findViewById(R.id.volume_icon);
 		mVolumeSeek = (SeekBar)findViewById(R.id.volume_seek);
-		
-		mVolumeHelper = new VolumeHelper(mContext);
-		int headsetState = VolumeHelper.getHeadsetState(mContext);
-		mNumVolumeValues = VolumeHelper.getNumVolumeValues(headsetState);
+
+        mSoundManager = new SoundManager(mContext);
+
+		mNumVolumeValues = mSoundManager.getMaxVolume();
 		mVolumeSeek.setMax(mNumVolumeValues - 1);
 		mVolumeSeek.setOnSeekBarChangeListener(mSeekBarChangeListener);
-		
-		mVolume = mVolumeHelper.readAudioVolume();
+
+		mVolume = mSoundManager.readAudioVolume();
 		updateVolumeDrawable(mVolume);
 		
 		mVolumeSeek.setProgress(mVolume);
-		mSoundManager = new SoundManager(mContext);
+
 
 		// used to move the seekbar. temporary solution until
 		// the GDK improves
@@ -71,18 +67,15 @@ public class VolumeDialog extends Dialog {
 	protected void onStart() {
 		super.onStart();
 		mContext.registerReceiver(mHeadsetReceiver, new IntentFilter("android.intent.action.HEADSET_PLUG"));
-		Log.d(TAG, "headset receiver registered");
 	}
 	
 	@Override
 	protected void onStop() {
 		super.onStop();
 		mContext.unregisterReceiver(mHeadsetReceiver);
-		Log.d(TAG, "headset receiver unregistered");
 	}
 	
 	private OnSeekBarChangeListener mSeekBarChangeListener = new OnSeekBarChangeListener() {
-		
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
 		}
@@ -92,11 +85,9 @@ public class VolumeDialog extends Dialog {
 		}
 		
 		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
+		public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 			updateVolumeDrawable(progress);
-			mVolumeHelper.writeAudioVolume(progress);
-			Log.d(TAG, "volume changed to " + progress);
+            mSoundManager.writeAudioVolume(progress);
 		}
 	};
 	
@@ -125,7 +116,6 @@ public class VolumeDialog extends Dialog {
 		
 		@Override
 		public void onFingerCountChanged(int previousCount, int currentCount) {
-			Log.d(TAG, "finger coung chanted from " + previousCount + " to " + currentCount);
 			if(previousCount > 0 && currentCount == 0) {
 				mVolume = mVolumeSeek.getProgress();
 				
@@ -180,10 +170,9 @@ public class VolumeDialog extends Dialog {
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			int headsetState = intent.getIntExtra("state", 0);
-			mNumVolumeValues = VolumeHelper.getNumVolumeValues(headsetState);
+			mNumVolumeValues = mSoundManager.getMaxVolume();
 			mVolumeSeek.setMax(mNumVolumeValues - 1);
-			Log.d(TAG, "headset state changed to " + headsetState);
 		}
 	};
+
 }

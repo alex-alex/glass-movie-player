@@ -1,36 +1,29 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardScrollView;
-import com.ocd.dev.glassmovieplayer.SoundManager.SoundId;
+import me.studnicka.glassmovieplayer.SoundManager.SoundId;
 
 public class MovieBucketBrowserActivity extends Activity implements LoaderCallbacks<Cursor> {
-	public static final int RESULT_VIDEO = 1;
 	private static final int URL_LOADER = 0;
 	private CardScrollView mCardScrollView;
-	private GestureDetector mTouchDetector;
 	private MovieBucketAdapter mAdapter;
 	private View mEmptyMessage;
 	private int mLength;
@@ -76,30 +69,8 @@ public class MovieBucketBrowserActivity extends Activity implements LoaderCallba
 			}
 		}
 	};
-	
-	/*
-	private BaseListener mBaseListener = new BaseListener() {
-		
-		@Override
-		public boolean onGesture(Gesture gesture) {
-			if(gesture == Gesture.TAP) {
-				int position = mCardScrollView.getSelectedItemPosition();
-				
-				if(mLength > 0 && position != -1) {
-					getSoundManager().playSound(SoundId.TAP);
-					Intent intent = new Intent(MovieBucketBrowserActivity.this, MoviePickerActivity.class);
-					intent.putExtra(MoviePickerActivity.EXTRA_MOVIE_BUCKET, mMovieBuckets.get(position).getId());
-					startActivity(intent);
-					return true;
-				}
-			}
-			return false;
-		}
-	};
-	*/
 
-    private SoundManager getSoundManager()
-    {
+    private SoundManager getSoundManager() {
       return ((GlassApplication)getApplication()).getSoundManager();
     }
 

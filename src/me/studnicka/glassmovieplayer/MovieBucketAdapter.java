@@ -1,4 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import java.util.List;
 
@@ -46,8 +46,7 @@ public class MovieBucketAdapter extends CardScrollAdapter {
 		if(convertView == null) {
 			view = mInflater.inflate(R.layout.movie_bucket_row, parent, false);
 			holder = new ViewHolder();
-			
-			
+
 			holder.name = (TextView)view.findViewById(R.id.name);
 			ImageView thumbnail1 = (ImageView)view.findViewById(R.id.thumbnail1);
 			ImageView thumbnail2 = (ImageView)view.findViewById(R.id.thumbnail2);
@@ -64,7 +63,7 @@ public class MovieBucketAdapter extends CardScrollAdapter {
 		
 		MovieBucket item = mMovieBuckets.get(position);
 		holder.name.setText(item.getDisplayName());
-		holder.count.setText(Long.toString(position+1) + " of " + mMovieBuckets.size());
+		holder.count.setText(Long.toString(position+1) + " / " + mMovieBuckets.size());
 		
 		List<Movie> movies = item.getMovies();
 		for(int i=0; i<Math.min(4, movies.size()); ++i) {

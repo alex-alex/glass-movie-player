@@ -1,9 +1,9 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import android.app.Application;
 
 public class GlassApplication extends Application {
-	private  SoundManager mSoundManager;
+	private SoundManager mSoundManager;
 	
 	@Override
 	public void onCreate() {

@@ -1,4 +1,4 @@
-package com.ocd.dev.glassmovieplayer;
+package me.studnicka.glassmovieplayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.TimedText;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +40,7 @@ import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.touchpad.GestureDetector.BaseListener;
 import com.google.android.glass.touchpad.GestureDetector.FingerListener;
 import com.google.android.glass.touchpad.GestureDetector.ScrollListener;
-import com.ocd.dev.glassmovieplayer.SoundManager.SoundId;
+import me.studnicka.glassmovieplayer.SoundManager.SoundId;
 
 public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
 	public static final String TAG = "VID";
@@ -61,6 +62,7 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 	private int mVideoIndex = 0;
 	private boolean paused;
 	private AudioManager mAudioManager;
+    Context ctx = (Context)this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 	        Gravity.CENTER_VERTICAL));
         
 		mContainer = (FrameLayout) findViewById(R.id.movieSurfaceContainer);
+        //mContainer.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mContainer.addView(mLoadProgressBar);
 	}
 
@@ -102,7 +105,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 			
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				Log.e(TAG, "focus");
 				Toast.makeText(MoviePlayerActivity.this, "focus", Toast.LENGTH_LONG).show();
 			}
 		});
@@ -124,7 +126,15 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
             mPlayer.setDataSource(this, mMovieUri);
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnErrorListener(mErrorListener);
-            Log.e(TAG, "initialized movie player");
+            mPlayer.setOnTimedTextListener(mTimedTextListener);
+
+            String subtitlePath = mMovieUri.toString().substring(0, mMovieUri.toString().length() - 4) + ".srt";
+            mPlayer.addTimedTextSource(subtitlePath, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            int textTrackIndex = findTrackIndexFor(MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mPlayer.getTrackInfo());
+            if (textTrackIndex >= 0) {
+                mPlayer.selectTrack(textTrackIndex);
+            }
+
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             errorLoadingMediaPlayer();
@@ -139,6 +149,16 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
             errorLoadingMediaPlayer();
         }
 	}
+
+    private int findTrackIndexFor(int mediaTrackType, MediaPlayer.TrackInfo[] trackInfo) {
+        int index = -1;
+        for (int i = 0; i < trackInfo.length; i++) {
+            if (trackInfo[i].getTrackType() == mediaTrackType) {
+                return i;
+            }
+        }
+        return index;
+    }
 	
 	private void errorLoadingMediaPlayer() {
 		throw new RuntimeException("Error loading MediaPlayer");
@@ -169,8 +189,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
     	super.onResume();
     	mWakeLock.acquire();
     	
-    	Log.e(TAG, "on resume. Prepared: " + mPrepared);
-    	
     	if(mPrepared) {
     		mPlayer.setOnCompletionListener(mCompletion);
     	}
@@ -184,7 +202,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
     
     @Override
 	protected void onStop() {
-    	Log.e("ASS", "on stop called");
     	super.onStop();
     	// commit current position and url for restore
     	SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -203,8 +220,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
     
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	Log.e(TAG, "keydown " + event.getKeyCode());
-    	
     	if(keyCode == KeyEvent.KEYCODE_BACK) {
     		getSoundManager().playSound(SoundId.DISMISS);
     	}
@@ -236,7 +251,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 					resumeMovie();
 				}
 			});
-    		Log.e("ASS", "volume adjusting");
     		dialog.show();
     		return true;
     	default:
@@ -299,7 +313,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
     public void surfaceCreated(SurfaceHolder holder) {
     	mPlayer.setDisplay(holder);
         mPlayer.prepareAsync();
-        Log.e(TAG, "called prepareAsync in surfaceCreated");
     }
 
     @Override
@@ -308,8 +321,6 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-		Log.e(TAG, "video at index " + mVideoIndex + " prepared. starting");
-		
 		// some videos are occasionally not loaded properly. this code tries to reload
 		if(mPlayer.getDuration() <= 0) {
 			Log.e(TAG, "something went wrong while preparing. retrying");
@@ -363,14 +374,12 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 
     	@Override
     	public void onCompletion(MediaPlayer mp) {
-    		Log.e(TAG, "video completed");
     		playNextMovieIfNeeded();
     	}
     };
     
     private void playNextMovieIfNeeded() {
     	if(mVideoList == null || mVideoIndex >= mVideoList.size()) {
-			Log.e(TAG, "all videos completed");
     		getSoundManager().playSound(SoundId.VIDEO_STOP);
     		mMovieSeekBar.hideNow();
     		finish();
@@ -382,9 +391,7 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
     
     private void playNextMovie() {
 		try {
-			Log.e(TAG, "preparing video at index " + mVideoIndex);
 			mMovieUri = Uri.parse((String)mVideoList.get(mVideoIndex));
-			Log.e(TAG, "URI: " + mMovieUri);
 			mPlayer.reset();
 			mPlayer.setDataSource(MoviePlayerActivity.this, mMovieUri);
 			mPlayer.prepareAsync();
@@ -436,6 +443,24 @@ public class MoviePlayerActivity extends Activity implements SurfaceHolder.Callb
 			return false;
 		}
 	};
+
+    private MediaPlayer.OnTimedTextListener mTimedTextListener = new MediaPlayer.OnTimedTextListener() {
+        @Override
+        public void onTimedText(MediaPlayer mediaPlayer, final TimedText timedText) {
+            if (timedText != null) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(ctx, timedText.getText().toString().substring(0, timedText.getText().length() - 4), Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+                    }
+                });
+            }
+
+
+        }
+    };
 	
 	private void fatalErrorMessage(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
