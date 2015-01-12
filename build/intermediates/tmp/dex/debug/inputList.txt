@@ -1,2 +1,0 @@
-/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/build/intermediates/classes/debug
-/Users/Alex/Development/AndroidStudioProjects/glass-movie-player/build/intermediates/pre-dexed/debug/android-support-v4-e0517e22ab4d659cfb0444e5d14b304f3909fedb.jar
